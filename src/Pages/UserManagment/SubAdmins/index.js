@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 
 import { FaCheckCircle } from "react-icons/fa";
-import { getAPI, postAPI } from "../../../services/apisMethod";
+import { getAPI } from "../../../services/apisMethod";
 import { managenmentApis } from "../../../apis/client";
 import { Button, FormInput } from "../../../Components/Custom";
 import { useForm } from "react-hook-form";
-import FormModal from "../../../Components/Modals/FormModal";
+import CustomModal from "../../../Components/Modals/CustomModal";
+import { formFields } from "../settings";
 function SubAdmins() {
   const [adminData, setAdminData] = useState([]);
   const [open, setOpen] = useState(false);
@@ -16,6 +17,9 @@ function SubAdmins() {
     formState: { errors },
   } = useForm();
 
+
+
+  //GET ADMINS
   useEffect(() => {
     getAdmins();
   }, []);
@@ -31,70 +35,49 @@ function SubAdmins() {
         console.error(error);
       });
   }
-  async function CreateAdmin() {
-    postAPI(managenmentApis.GET_ADMIN)
-      .then(({ statusCode, data }) => {
-        console.log(data);
+  const onSubmit = (payload) => {
+    // setLoading(true);
+    console.log(payload);
+    // postAPI(AuthAPIs.SIGNIN,payload)
+    //   .then(({statusCode,data}) => {
+    //      console.log(statusCode,data);
 
-        setAdminData(data.adminData);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }
+    //     dispatch(loginSuccessful(data.accessToken));
+
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   })
+    //   .finally(setLoading(false));
+  };
   const onToggleModal = () => {
     setOpen(!open);
   };
   return (
     <>
-      {open && (
-        <FormModal openModal={open} closeModal={open}>
-          <form onSubmit={handleSubmit(CreateAdmin)}>
-            <FormInput
-              label="Fullname"
-              type="text"
-              name="fullname"
-              placeholder="Enter your fullname..."
-              register={register}
-              validation={{
-                required: "Fullname is required",
-              }}
-              errors={errors} // Pass errors object
-            />
-            <FormInput
-              label="Email"
-              type="email"
-              name="email"
-              placeholder="Enter your email..."
-              register={register}
-              validation={{
-                required: "Email is required",
-              }}
-              errors={errors} // Pass errors object
-            />
-            <FormInput
-              label="Password"
-              type="email"
-              name="email"
-              placeholder="Enter your email..."
-              register={register}
-              validation={{
-                required: "Email is required",
-              }}
-              errors={errors} // Pass errors object
-            />
-            <div className="w-fit">
-              <Button
-                handleClick={() => {
-                  onToggleModal();
-                }}
-              >
-                Submit
-              </Button>
-            </div>
+      <CustomModal
+        isOpen={open}
+        onClose={onToggleModal}
+        title="Create Admin"
+        content={
+          <form onSubmit={handleSubmit(onSubmit)}>
+            {formFields.map((items, index) => (
+              <FormInput
+                key={index}
+                label={items.label}
+                type={items.type}
+                name={items.name}
+                placeholder={items.placeholder}
+                register={register}
+                validation={items.validation}
+                errors={errors}
+              />
+            ))}
+            <Button type="submit">Submit</Button>
           </form>
-        </FormModal>
-      )}
+        }
+      />
+
       <div className="w-full p-8 flex jus">
         <div className="w-fit">
           <Button

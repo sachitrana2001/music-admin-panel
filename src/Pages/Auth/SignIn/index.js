@@ -20,7 +20,6 @@ const SignIn = () => {
     formState: { errors },
   } = useForm();
 
-  // Handle form submission
   const onSubmit = (payload) => {
     setLoading(true);
     console.log(payload);

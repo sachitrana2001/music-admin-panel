@@ -1,5 +1,3 @@
-export  const TokenUtility= {
-     token : null,
-     expiresAt : null
-  }
-  
+export const TokenUtility={
+    token:""
+}

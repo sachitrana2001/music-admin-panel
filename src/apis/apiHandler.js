@@ -1,6 +1,7 @@
 import { toast } from "react-toastify";
 import axios from "axios";
 import { appConfig } from "../Config";
+import { store } from "../redux/store";
 
 const showError = (message) => {
   toast.error(
@@ -8,6 +9,7 @@ const showError = (message) => {
       "Something went wrong"
   );
 };
+console.log(store.getState());
 
 export const AxiosInstance = axios.create({
   baseURL: appConfig.apiBaseUrl,
@@ -18,7 +20,8 @@ export const AxiosInstance = axios.create({
 
 AxiosInstance.interceptors.request.use(
   (config) => {
-    const token=""
+    const token = store.getState().admin.token;
+
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;
     }
