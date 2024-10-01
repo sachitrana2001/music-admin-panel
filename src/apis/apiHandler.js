@@ -9,7 +9,6 @@ const showError = (message) => {
       "Something went wrong"
   );
 };
-console.log(store.getState());
 
 export const AxiosInstance = axios.create({
   baseURL: appConfig.apiBaseUrl,
